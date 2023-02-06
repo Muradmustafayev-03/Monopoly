@@ -4,6 +4,7 @@ class Cell:
         self.value = value
         self.color = color
         self.rent = rent
+        self.owner = None
 
     def __repr__(self):
-        return str(self.value)
+        return self.name
