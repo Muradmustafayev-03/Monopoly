@@ -35,7 +35,7 @@ class Monopoly:
 
 if __name__ == '__main__':
     num_players = int(input('Enter number of players: '))
-    players = [Player(f'Player {i}') for i in range(1, num_players + 1)]
+    players = [Player(input(f'Enter the name of the player {i}: ')) for i in range(1, num_players + 1)]
     game = Monopoly()
     while True:
         for player in players:
