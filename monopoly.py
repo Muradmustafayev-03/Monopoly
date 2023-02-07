@@ -5,10 +5,6 @@ from player import Player
 
 class Monopoly:
     @staticmethod
-    def check_funds(player: Player, cost: int) -> bool:
-        return player.money >= cost
-
-    @staticmethod
     def collect_rent(player: Player, cell: Cell):
         if cell.owner is None:
             return
@@ -39,10 +35,17 @@ class Monopoly:
     def play_turn(self, player: Player):
         print(f'\n{player.name}\nMoney: {player.money}\nProperty: {player.property}')
         input('Press enter to roll the dice: ')
+        old_position = player.position
         dice_roll = player.roll_dice()
         player.move(dice_roll)
         cell = BOARD[player.position]
         print(f'{player.name} rolled a {dice_roll} and landed on {cell.name}')
 
+        if player.position < old_position:
+            print(f'{player.name} passed GO and collected $200')
+            player.money += 200
+
         self.collect_rent(player, cell)
         self.buy_property(player, cell)
+
+        action = input('Press Enter to finish your turn: ')
