@@ -115,3 +115,8 @@ class Monopoly:
                     continue
 
                 self.sell_property_auction(player, player.property[choice])
+
+    def play_game(self):
+        while True:
+            for player in self.players:
+                self.play_turn(player)
