@@ -24,4 +24,3 @@ CELL_COLORS = ['Go', 'Brown', 'Community Chest', 'Brown', 'Tax', 'Railroad',
 
 BOARD = [Cell(name=CELL_NAMES[i], value=CELL_VALUES[i], rent=CELL_RENTS[i], color=CELL_COLORS[i])
              for i in range(40)]
-

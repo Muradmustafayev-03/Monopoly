@@ -7,6 +7,36 @@ class Monopoly:
     def __init__(self, players: list[Player]):
         self.players = players
 
+    def play_turn(self, player: Player):
+        print(f'\n{player.name}\nMoney: {player.money}\nProperty: {player.property}')
+
+        cell = self.roll_dice_and_move(player)
+
+        self.collect_rent(player, cell)
+        self.buy_property(player, cell)
+        self.handle_sell(player)
+
+    def play_game(self):
+        while True:
+            for player in self.players:
+                self.play_turn(player)
+
+    @staticmethod
+    def roll_dice_and_move(player: Player) -> Cell:
+        input('Press enter to roll the dice: ')
+        old_position = player.position
+        dice_roll = player.roll_dice()
+        player.move(dice_roll)
+
+        cell = BOARD[player.position]
+        print(f'{player.name} rolled a {dice_roll} and landed on {cell.name}')
+
+        if player.position < old_position:
+            print(f'{player.name} passed GO and collected $200')
+            player.money += 200
+
+        return cell
+
     @staticmethod
     def collect_rent(player: Player, cell: Cell):
         if cell.owner is None:
@@ -34,6 +64,38 @@ class Monopoly:
             print(f'{player.name} bought {cell.name}')
         else:
             print(f'{player.name} decided not to buy {cell.name}')
+
+    def handle_sell(self, player: Player):
+        while True:
+            action = input('Press Enter to finish your turn or input "s" to sell a property: ')
+            if not action:
+                break
+            if action == 's':
+                if not player.property:
+                    print("You don't posses any property")
+                    continue
+                for i, prop in enumerate(player.property):
+                    print(f'{i + 1}. {prop.name}')
+                choice = int(input('Enter the number of the property you want to sell: ')) - 1
+                if choice >= len(player.property) or choice < 0:
+                    print('Wrong...')
+                    continue
+                self.sell_property_auction(player, player.property[choice])
+
+    def sell_property_auction(self, player: Player, cell: Cell):
+        if cell not in player.property:
+            return
+
+        print(f'{player.name} is selling {cell.name} on auction starting bid is {cell.value}')
+
+        bidder, bid = self.recursive_auction(None, cell.value, player, cell)
+
+        bidder.money -= bid
+        player.money += bid
+        cell.owner = bidder
+        player.property.remove(cell)
+        bidder.property.append(cell)
+        print(f'{bidder.name} bought {cell.name} for {bid} from {player.name}')
 
     def recursive_auction(self, bidder: Player or None, bid: int, player: Player, cell: Cell):
         current_bid = bid
@@ -66,57 +128,3 @@ class Monopoly:
             return current_bidder, current_bid
         else:
             return self.recursive_auction(current_bidder, current_bid, player, cell)
-
-    def sell_property_auction(self, player: Player, cell: Cell):
-        if cell not in player.property:
-            return
-
-        print(f'{player.name} is selling {cell.name} on auction starting bid is {cell.value}')
-
-        bidder, bid = self.recursive_auction(None, cell.value, player, cell)
-
-        bidder.money -= bid
-        player.money += bid
-        cell.owner = bidder
-        player.property.remove(cell)
-        bidder.property.append(cell)
-        print(f'{bidder.name} bought {cell.name} for {bid} from {player.name}')
-
-    def play_turn(self, player: Player):
-        print(f'\n{player.name}\nMoney: {player.money}\nProperty: {player.property}')
-        input('Press enter to roll the dice: ')
-        old_position = player.position
-        dice_roll = player.roll_dice()
-        player.move(dice_roll)
-        cell = BOARD[player.position]
-        print(f'{player.name} rolled a {dice_roll} and landed on {cell.name}')
-
-        if player.position < old_position:
-            print(f'{player.name} passed GO and collected $200')
-            player.money += 200
-
-        self.collect_rent(player, cell)
-        self.buy_property(player, cell)
-
-        while True:
-            action = input('Press Enter to finish your turn or input "s" to sell a property: ')
-
-            if not action:
-                break
-            if action == 's':
-                if not player.property:
-                    print("You don't posses any property")
-                    continue
-                for i, prop in enumerate(player.property):
-                    print(f'{i + 1}. {prop.name}')
-                choice = int(input('Enter the number of the property you want to sell: ')) - 1
-                if choice >= len(player.property) or choice < 0:
-                    print('Wrong input\n')
-                    continue
-
-                self.sell_property_auction(player, player.property[choice])
-
-    def play_game(self):
-        while True:
-            for player in self.players:
-                self.play_turn(player)
