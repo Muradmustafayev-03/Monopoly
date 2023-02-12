@@ -5,6 +5,7 @@ class Cell:
         self.value = value
         self.rent = rent
         self.owner = None
+        self.level = 0
 
     def __repr__(self):
         return self.name
