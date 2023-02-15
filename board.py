@@ -1,4 +1,5 @@
 from cell import Cell
+import random
 
 CELL_NAMES = ['Go', 'Mediterranean Ave', 'Community Chest', 'Baltic Ave', 'Income Tax', 'Reading Railroad',
               'Oriental Ave', 'Chance', 'Vermont Ave', 'Connecticut Ave', 'Jail', 'St. Charles Place',
@@ -24,3 +25,7 @@ CELL_COLORS = ['Go', 'Brown', 'Community Chest', 'Brown', 'Tax', 'Railroad',
 
 BOARD = [Cell(name=CELL_NAMES[i], value=CELL_VALUES[i], rent=CELL_RENTS[i], color=CELL_COLORS[i])
              for i in range(40)]
+
+
+def roll_dice(num_dices: int = 2) -> int:
+    return sum([random.randint(1, 6) for _ in range(num_dices)])

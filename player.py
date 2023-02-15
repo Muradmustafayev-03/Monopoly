@@ -1,6 +1,5 @@
 import math
-import random
-from board import BOARD
+from board import BOARD, roll_dice
 from cell import Cell
 
 
@@ -24,17 +23,13 @@ class Player:
             f'\nLoans: {sum([loan[1] for loan in self.loans])}'
         )
 
-    @staticmethod
-    def roll_dice(num_dices: int = 2) -> int:
-        return sum([random.randint(1, 6) for _ in range(num_dices)])
-
     def move(self, dice_roll: int):
         self.position = (self.position + dice_roll) % len(BOARD)
 
     def roll_dice_and_move(self) -> Cell:
         input('Press enter to roll the dice: ')
         old_position = self.position
-        dice_roll = self.roll_dice()
+        dice_roll = roll_dice()
         self.move(dice_roll)
 
         cell = BOARD[self.position]

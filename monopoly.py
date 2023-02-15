@@ -41,21 +41,27 @@ class Monopoly:
         cell.owner.money += cell.rent
         print(f'{player} paid {cell.rent} to {cell.owner}')
 
-    @staticmethod
-    def buy_property(player: Player, cell: Cell):
+    def buy_property(self, player: Player, cell: Cell):
         if cell.value == 0 or cell.owner is not None:
             return
-        if player.money < cell.value:
-            print(f"{player}, you don't have enough money to buy {cell} for {cell.value}")
-            return
         choice = input(f'Do you want to buy {cell} for {cell.value}? (y/n): ')
-        if choice.lower() == 'y':
-            player.money -= cell.value
-            player.property.append(cell)
-            cell.owner = player
-            print(f'{player.name} has just bought the {cell}')
-        else:
+        if choice.lower() != 'y':
             print(f'{player.name} decided not to buy {cell}')
+            return
+        while player.money < cell.value:
+            print(f"{player}, you don't have enough money to buy {cell} for {cell.value}")
+            action = input(f'Press Enter to cancel or you can take a loan("l") or sell your property("s")\n')
+            if not action:
+                return
+            if action.lower() == 's':
+                self.handle_sell(player)
+            if action.lower() == 'l':
+                player.take_loan()
+
+        player.money -= cell.value
+        player.property.append(cell)
+        cell.owner = player
+        print(f'{player.name} has just bought the {cell}')
 
     def handle_sell(self, player: Player):
         if not player.property:
@@ -76,6 +82,9 @@ class Monopoly:
         print(f'{player} is selling {cell} on auction starting bid is {cell.value}')
 
         bidder, bid = self.recursive_auction(None, cell.value, player, cell)
+
+        if not bidder:
+            return
 
         bidder.money -= bid
         player.money += bid
