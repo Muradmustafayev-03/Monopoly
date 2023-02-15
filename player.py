@@ -64,3 +64,6 @@ class Player:
             return
         loan = self.new_loan(int(input('How much money do you want to borrow?\n')))
         print(f'You have borrowed {loan}$. The loan is to be repaid in 10 turns with 10% interest({int(loan * 1.1)}$).')
+
+    def count_collection(self, cell: Cell) -> int:
+        return [p.color for p in self.property].count(cell.color)

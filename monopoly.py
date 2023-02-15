@@ -37,9 +37,10 @@ class Monopoly:
     def collect_rent(player: Player, cell: Cell):
         if cell.owner is None or cell.owner == player:
             return
-        player.money -= cell.rent
-        cell.owner.money += cell.rent
-        print(f'{player} paid {cell.rent} to {cell.owner}')
+        rent = cell.get_rent(collection=player.count_collection(cell))
+        player.money -= rent
+        cell.owner.money += rent
+        print(f'{player} paid {rent} to {cell.owner}')
 
     def buy_property(self, player: Player, cell: Cell):
         if cell.value == 0 or cell.owner is not None:
