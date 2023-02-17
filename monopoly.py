@@ -42,6 +42,14 @@ class Monopoly:
         cell.owner.money += rent
         print(f'{player} paid {rent} to {cell.owner}')
 
+    @staticmethod
+    def collect_tax(player: Player, cell: Cell):
+        if cell.color != 'Tax':
+            return
+        tax = cell.get_rent(0)
+        player.money -= tax
+        print(f'{player} paid {tax}vof tax')
+
     def buy_property(self, player: Player, cell: Cell):
         if cell.value == 0 or cell.owner is not None:
             return
