@@ -16,7 +16,7 @@ class Cell:
 
     def get_rent(self, collection: int = 1) -> int:
         if self.color == 'Utility':
-            return roll_dice() * 4 if collection == 1 else roll_dice() * 10
+            return roll_dice() * 4 if collection < 2 else roll_dice() * 10
         if self.color == 'Railroad':
             return self.__rent * 2 ** (collection - 1)
         if collection == self.collection and self.level == 0:
