@@ -1,6 +1,7 @@
 import math
-from board import BOARD, roll_dice
 from cell import Cell
+from board import BOARD
+from rand import roll_dice
 
 
 class Player:

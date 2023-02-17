@@ -1,12 +1,13 @@
-from board import CELL_COLORS, roll_dice
+from rand import roll_dice
 
 
 class Cell:
-    def __init__(self, name: str, color: str, value: int, rent: list):
+    def __init__(self, name: str, color: str, value: int, rent: list, collection: int):
         self.name = name
         self.color = color
         self.value = value
         self.__rent = rent
+        self.collection = collection
         self.owner = None
         self.level = 0
 
@@ -18,6 +19,6 @@ class Cell:
             return roll_dice() * 4 if collection == 1 else roll_dice() * 10
         if self.color == 'Railroad':
             return self.__rent * 2 ** (collection - 1)
-        if collection == CELL_COLORS.count(self.color) and self.level == 0:
+        if collection == self.collection and self.level == 0:
             return self.__rent[0] * 2
         return self.__rent[self.level]
