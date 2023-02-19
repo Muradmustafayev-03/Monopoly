@@ -64,5 +64,4 @@ BOARD = [Cell(name=CELL_NAMES[i],
               value=CELL_VALUES[i],
               rent=CELL_RENTS[i],
               color=CELL_COLORS[i],
-              collection=CELL_COLORS.count(CELL_COLORS[i])
               ) for i in range(40)]
