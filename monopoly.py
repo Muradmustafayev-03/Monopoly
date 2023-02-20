@@ -20,6 +20,7 @@ class Monopoly:
         cell = player.roll_dice_and_move()
 
         self.collect_rent(player, cell)
+        self.collect_tax(player, cell)
         self.buy_property(player, cell)
 
         while True:
@@ -48,7 +49,7 @@ class Monopoly:
             return
         tax = cell.get_rent(0)
         player.money -= tax
-        print(f'{player} paid {tax}vof tax')
+        print(f'{player} paid {tax} of tax')
 
     def buy_property(self, player: Player, cell: Cell):
         if cell.value == 0 or cell.owner is not None:
