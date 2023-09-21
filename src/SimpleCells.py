@@ -18,10 +18,6 @@ class PassiveCell(AbstractCell):
 class GoCell(AbstractCell):
     """
     Class for the Go cell. This cell gives money to the player.
-
-    Attributes:
-        name (str): The name of the cell.
-        earn_amount (int): The amount of money the player gets when he passes from this cell.
     """
 
     def __init__(self, name: str = "Go", earn_amount: int = 200):
@@ -34,4 +30,23 @@ class GoCell(AbstractCell):
 
     def action(self, player):
         """The player gets money."""
-        player.add_money(self.earn_amount)
+        player.earn(self.earn_amount)
+
+
+class TaxCell(AbstractCell):
+    """
+    Class for the Tax cell. This cell takes money from the player.
+    """
+
+    def __init__(self, position: int, name: str, tax_amount: int):
+        super().__init__(position, name)
+        self._tax_amount = tax_amount
+
+    @property
+    def tax_amount(self):
+        return self._tax_amount
+
+    def action(self, player):
+        """The player pays money."""
+        player.pay(self.tax_amount)
+
