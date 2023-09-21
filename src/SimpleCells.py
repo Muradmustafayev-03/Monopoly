@@ -50,3 +50,15 @@ class TaxCell(AbstractCell):
         """The player pays money."""
         player.pay(self.tax_amount)
 
+
+class GoToJailCell(AbstractCell):
+    """
+    Class for the Go To Jail cell. This cell sends the player to jail.
+    """
+
+    def __init__(self, position: int, name: str):
+        super().__init__(position, name)
+
+    def action(self, player):
+        """The player goes to jail."""
+        player.go_to_jail()
