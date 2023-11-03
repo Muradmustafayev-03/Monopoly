@@ -167,4 +167,18 @@ class StreetCell(RealEstateCell):
         assert self.hotel is False, 'You can not build more than one hotel on a street.'
 
         self.owner.pay(self.house_price)
+        self._houses = 0
         self._hotel = True
+
+    def sell_house(self):
+        assert self.houses > 0, 'You can not sell a house if you do not have any.'
+
+        self.owner.earn(self.house_price // 2)
+        self._houses -= 1
+
+    def sell_hotel(self):
+        assert self.hotel is True, 'You can not sell a hotel if you do not have any.'
+
+        self.owner.earn(self.house_price // 2)
+        self._hotel = False
+        self._houses = 4
