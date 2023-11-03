@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from AbstractCell import AbstractCell
+from ..utils.random_utils import roll_dices
 
 
 class RealEstateCell(ABC, AbstractCell):
@@ -61,6 +62,7 @@ class RealEstateCell(ABC, AbstractCell):
         player.pay(self.rent_amount)
 
     def count_collection(self) -> int:
+        assert self.owner is not None, 'This property belongs to the bank.'
         count = 0
         for real_estate in self.owner.property:
             if type(real_estate) == type(self):
@@ -86,3 +88,17 @@ class RailwayCell(RealEstateCell):
     @property
     def rent_amount(self):
         return 25 * (2 ** (self.count_collection() - 1))
+
+
+class UtilityCell(RealEstateCell):
+    """
+    Class for the Utility cell. This cell can be bought and sold.
+    """
+
+    def __init__(self, position: int, name: str):
+        super().__init__(position, name, 150)
+
+    @property
+    def rent_amount(self):
+        multiplier = 10 if self.count_collection() == self.count_total() else 4
+        return roll_dices() * multiplier
