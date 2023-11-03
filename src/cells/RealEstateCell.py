@@ -109,16 +109,33 @@ class StreetCell(RealEstateCell):
     Class for the Street cell. This cell can be bought and sold.
     """
 
-    def __init__(self, position: int, name: str, price: int, color: str, rents: tuple):
+    def __init__(self, position: int, name: str, price: int, color: str, rents: tuple, house_price: int):
         super().__init__(position, name, price)
         self._color = color
         self._rents = rents
+        self._house_price = house_price
         self._houses = 0
         self._hotel = False
 
     @property
     def color(self):
         return self._color
+
+    @property
+    def rents(self):
+        return self._rents
+
+    @property
+    def house_price(self):
+        return self._house_price
+
+    @property
+    def houses(self):
+        return self._houses
+
+    @property
+    def hotel(self):
+        return self._hotel
 
     @property
     def rent_amount(self):
@@ -138,7 +155,16 @@ class StreetCell(RealEstateCell):
         return count
 
     def build_house(self):
-        pass  # to implement later
+        assert self.houses < 4, 'You can not build more than 4 houses.'
+        assert self.hotel is False, 'You can not build a house on a hotel.'
+        assert self.count_collection() == self.count_total(), 'You can not build a house on a street unless you own all streets of the same color.'
+
+        self.owner.pay(self.house_price)
+        self._houses += 1
 
     def build_hotel(self):
-        pass  # to implement later
+        assert self.houses == 4, 'You can not build a hotel unless you have 4 houses.'
+        assert self.hotel is False, 'You can not build more than one hotel on a street.'
+
+        self.owner.pay(self.house_price)
+        self._hotel = True
