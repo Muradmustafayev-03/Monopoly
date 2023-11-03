@@ -7,6 +7,7 @@ class RealEstateCell(ABC, AbstractCell):
     Abstract class for different kinds of real estate cells. Can be bought and sold,
     therefore has price and owner.
     """
+
     def __init__(self, position: int, name: str, price: int):
         super().__init__(position, name)
         self._price = price
@@ -72,3 +73,16 @@ class RealEstateCell(ABC, AbstractCell):
             if type(cell) == type(self):
                 count += 1
         return count
+
+
+class RailwayCell(RealEstateCell):
+    """
+    Class for the Railway cell. This cell can be bought and sold.
+    """
+
+    def __init__(self, position: int, name: str):
+        super().__init__(position, name, 200)
+
+    @property
+    def rent_amount(self):
+        return 25 * (2 ** (self.count_collection() - 1))
