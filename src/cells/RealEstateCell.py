@@ -102,3 +102,43 @@ class UtilityCell(RealEstateCell):
     def rent_amount(self):
         multiplier = 10 if self.count_collection() == self.count_total() else 4
         return roll_dices() * multiplier
+
+
+class StreetCell(RealEstateCell):
+    """
+    Class for the Street cell. This cell can be bought and sold.
+    """
+
+    def __init__(self, position: int, name: str, price: int, color: str, rents: tuple):
+        super().__init__(position, name, price)
+        self._color = color
+        self._rents = rents
+        self._houses = 0
+        self._hotel = False
+
+    @property
+    def color(self):
+        return self._color
+
+    @property
+    def rent_amount(self):
+        if self.hotel:
+            return self.rents[-1]
+        elif self.houses == 0 and self.count_collection() == self.count_total():
+            return self.rents[0] * 2
+        else:
+            return self.rents[self.houses]
+
+    def count_collection(self):
+        count = 0
+        for real_estate in self.owner.property:
+            if type(real_estate) == type(self):
+                if real_estate.color == self.color:
+                    count += 1
+        return count
+
+    def build_house(self):
+        pass  # to implement later
+
+    def build_hotel(self):
+        pass  # to implement later
